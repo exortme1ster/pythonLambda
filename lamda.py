@@ -1,5 +1,5 @@
 import json
-# import boto3
+import boto3
 
 from datetime import datetime
 from datetime import timedelta
@@ -11,23 +11,25 @@ import hashlib
 
 
 def lambda_handler(event, context):
-    # config = configparser.ConfigParser()
-    # config.read('config.ini')
-    # bucket = config['DEFAULT']['S3_BUCKET']
-    # key = config['DEFAULT']['S3_KEY']
-    # s3 = boto3.client("s3")
-    # response = s3.get_object(Bucket=bucket, Key=key)
-    # data = response['Body'].read().decode('utf-8')
-    f = open("logs.log", "r").read()
-    logs = f.split('\n')
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    bucket = config['DEFAULT']['S3_BUCKET']
+    key = config['DEFAULT']['S3_KEY']
+    s3 = boto3.client("s3")
+    response = s3.get_object(Bucket=bucket, Key=key)
+    data = response['Body'].read().decode('utf-8')
+    logs = data.split('\n')
+    # f = open("logs.log", "r").read()
+    # logs = f.split('\n')
 
     # get the input parameters
-    # inputT = event['queryStringParameters']['T']
-    # inputDeltaT = event['queryStringParameters']['dT']
+    inputT = event['queryStringParameters']['T']
+    inputDeltaT = event['queryStringParameters']['dT']
 
-    inputT = "23:47:05"
-    inputDeltaT = "00:00:02"
+    # inputT = "23:47:00"
+    # inputDeltaT = "00:00:05"
 
+    # getting initial times
     initialTime = datetime.strptime(inputT, "%H:%M:%S")
     inputDeltaTimeArray = inputDeltaT.split(':')
 
@@ -37,12 +39,13 @@ def lambda_handler(event, context):
     endDateTime = initialTime + timedelta(hours=int(inputDeltaTimeArray[0])) + timedelta(
         minutes=int(inputDeltaTimeArray[1])) + timedelta(seconds=int(inputDeltaTimeArray[2]))
 
-    print(startDateTime, endDateTime)
-
+    # gettin edge start and end times
     startTime = startDateTime.strftime("%H:%M:%S")
     endTime = endDateTime.strftime("%H:%M:%S")
 
     times = []
+
+    # filling times array with values from start to end time
 
     while (startDateTime.strftime("%H:%M:%S") <= endTime):
         times.append(startDateTime.strftime("%H:%M:%S"))
@@ -60,6 +63,7 @@ def lambda_handler(event, context):
     found = False
     Dict = {}
 
+    # separate values to build time -> value dict
     for i in range(0, len(logs)):
         if (logs[i] != ''):
             arrayOfTests = logs[i].split(" ")
@@ -78,9 +82,9 @@ def lambda_handler(event, context):
             else:
                 Dict[finalTime] = [concat]
 
-    # print(Dict)
-
+    # hash values
     hashed = []
+    transaction['content'] = hashed
     for i in range(0, len(times)):
         if times[i] in Dict:
             hashed.extend(Dict[times[i]])
@@ -103,7 +107,8 @@ def lambda_handler(event, context):
 
     print(response)
 
+    # return
     return response
 
 
-lambda_handler(1, 1)
+# lambda_handler(1, 1)

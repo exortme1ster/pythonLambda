@@ -27,6 +27,7 @@ If no logs were present in the timerange, the response is a 400-level message wi
 https://github.com/exortme1ster/AkkaLogsHandler
 https://github.com/exortme1ster/GRPCClientServer
 https://github.com/exortme1ster/LogFileGenerator
+https://github.com/exortme1ster/pythonLambda
 
 ## Video:
 https://www.youtube.com/watch?v=fmeBeOcpBy0
