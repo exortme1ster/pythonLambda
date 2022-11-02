@@ -21,6 +21,15 @@ The Lambda function checks with the help of dict if timestamp is present inside<
 If the logs are present, the response returned is the md5 hash of logs with a statusCode of 200.<br/>
 If no logs were present in the timerange, the response is a 400-level message with a message that logs were not present in the time range.
 
+
+## Running
+
+To run this, you can either use local file and do python <filename>.py or copy and paste this code directly to the lambda function
+
+## Tests
+
+I have two implementations : binary search and this one, after doing heavy tests (with 5000+ lines) and using both codes, runtime for this one is less for 10/12 tests. I can also show the binary search code on request later. I can explain it happens because python dict elements access has O(1) access time which is a lot faster than O(logn) for binary search
+
 ## All repos:
 
 https://github.com/exortme1ster/AkkaLogsHandler
