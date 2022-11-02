@@ -29,3 +29,4 @@ https://github.com/exortme1ster/GRPCClientServer
 https://github.com/exortme1ster/LogFileGenerator
 
 ## Video:
+https://www.youtube.com/watch?v=fmeBeOcpBy0
